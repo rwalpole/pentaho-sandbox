@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museums>
+    <museum id_museum="001">
+        <name>Victoria &amp; Albert</name>
+        <city>London</city>
+        <country>United Kingdom</country>
+    </museum>
+    <museum id_museum="002">
+        <name>Louvre</name>
+        <city>Paris</city>
+        <country>France</country>
+    </museum>
+    <museum id_museum="003">
+        <name>Smithsonian</name>
+        <city>Washington DC</city>
+        <country>USA</country>
+    </museum>
+</museums>
