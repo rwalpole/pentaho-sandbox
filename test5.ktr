@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>test4</name>
+    <name>test5</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -427,9 +427,9 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2021/04/07 17:18:16.181</created_date>
+    <created_date>2021/04/07 18:06:38.208</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2021/04/07 17:18:16.181</modified_date>
+    <modified_date>2021/04/07 18:06:38.208</modified_date>
     <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
@@ -438,8 +438,33 @@
   <order>
     <hop>
       <from>Text file input</from>
-      <to>Modified JavaScript value</to>
+      <to>Split field to rows</to>
       <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Split field to rows</from>
+      <to>Select values</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values</from>
+      <to>Replace in string</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Replace in string</from>
+      <to>User defined Java expression</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>User defined Java expression</from>
+      <to>length > 4</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>length > 4</from>
+      <to>Dummy (do nothing)</to>
+      <enabled>N</enabled>
     </hop>
   </order>
   <step>
@@ -457,12 +482,12 @@
     <passing_through_fields>N</passing_through_fields>
     <accept_field/>
     <accept_stepname/>
-    <separator>;</separator>
+    <separator>|</separator>
     <enclosure>"</enclosure>
     <enclosure_breaks>N</enclosure_breaks>
     <escapechar/>
-    <header>N</header>
-    <nr_headerlines>1</nr_headerlines>
+    <header>Y</header>
+    <nr_headerlines>378</nr_headerlines>
     <footer>N</footer>
     <nr_footerlines>1</nr_footerlines>
     <line_wrapped>N</line_wrapped>
@@ -481,7 +506,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>${Internal.Entry.Current.Directory}/houses.txt</name>
+      <name>/home/rkw/Source/GitHub/rwalpole/pentaho-sandbox/smcng10.txt</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -493,7 +518,7 @@
     </filters>
     <fields>
       <field>
-        <name>text</name>
+        <name>line</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -542,14 +567,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>208</yloc>
+      <xloc>200</xloc>
+      <yloc>100</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Modified JavaScript value</name>
-    <type>ScriptValueMod</type>
+    <name>Split field to rows</name>
+    <type>SplitFieldToRows3</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -558,27 +583,50 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var prop_code;
-posCod = indexOf(text,'Property Code:');
-if(posCod>=0)
-prop_code = trim(substr(text,posCod+15));
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
+    <splitfield>line</splitfield>
+    <delimiter>\s</delimiter>
+    <newfield>word</newfield>
+    <rownum>N</rownum>
+    <rownum_field>n</rownum_field>
+    <resetrownumber>Y</resetrownumber>
+    <delimiter_is_regex>Y</delimiter_is_regex>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Replace in string</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
     <fields>
       <field>
-        <name>prop_code</name>
-        <rename>prop_code</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <in_stream_name>word</in_stream_name>
+        <out_stream_name/>
+        <use_regex>yes</use_regex>
+        <replace_string>[^a-zA-Z0-9]</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
       </field>
     </fields>
     <attributes/>
@@ -590,8 +638,162 @@ prop_code = trim(substr(text,posCod+15));
       </output>
     </remotesteps>
     <GUI>
+      <xloc>704</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>line</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
       <xloc>544</xloc>
-      <yloc>256</yloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>length > 4</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to/>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>word_length</leftvalue>
+            <function>&gt;</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>Integer</type>
+              <text>4</text>
+              <length>-1</length>
+              <precision>0</precision>
+              <isnull>N</isnull>
+              <mask>####0;-####0</mask>
+            </value>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>word</leftvalue>
+            <function>CONTAINS</function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>geo</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1056</xloc>
+      <yloc>368</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>User defined Java expression</name>
+    <type>Janino</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formula>
+      <field_name>word_length</field_name>
+      <formula_string>word.length()</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>368</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Dummy (do nothing)</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1200</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

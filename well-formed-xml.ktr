@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>well-formed-xml</name>
+    <name>Check XML well-formed</name>
     <description/>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
     <directory>/</directory>
     <parameters>
     </parameters>
@@ -430,13 +431,119 @@
     <created_date>2021/04/07 12:08:22.909</created_date>
     <modified_user>-</modified_user>
     <modified_date>2021/04/07 12:08:22.909</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <order>
+    <hop>
+      <from>Data grid</from>
+      <to>Check XML well-formed</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Check XML well-formed</from>
+      <to>Dummy (do nothing)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Check XML well-formed</from>
+      <to>Write to log</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <step>
+    <name>Check XML well-formed</name>
+    <type>UserDefinedJavaClass</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <definitions>
+      <definition>
+        <class_type>TRANSFORM_CLASS</class_type>
+        <class_name>Processor</class_name>
+        <class_source>import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import org.pentaho.di.core.xml.XMLCheck;
+
+public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws KettleException {
+  if (first) {
+    first = false;
+  }
+
+  Object[] row = getRow();
+  boolean rowInError = false;
+  String errMsg = "";
+  int errCnt = 0;
+
+  if (row == null) {
+    setOutputDone();
+    return false;
+  }
+  Object[] outputRow = createOutputRow(row, data.outputRowMeta.size());
+
+  final String xmlString = get(Fields.In, "xml_string").getString(row);
+
+  InputStream xmlStream = null;
+  try{
+    xmlStream = new ByteArrayInputStream(xmlString.getBytes());
+    if(!XMLCheck.isXMLWellFormed(xmlStream)){
+      rowInError = true;
+      errMsg = "The following XML is not well-formed: " + xmlString;
+      errCnt = errCnt + 1;
+    }
+  }
+  catch(Exception ex){
+    rowInError = true;
+    errMsg = ex.getMessage();
+    errCnt = errCnt + 1;
+  }
+  finally {
+    try{
+	  if(xmlStream != null) xmlStream.close();
+    }
+    catch(IOException ioex){
+      // closing quietly
+    }
+  } 
+
+  if(!rowInError){
+    putRow(data.outputRowMeta, row);
+  } else {
+    putError(data.outputRowMeta, row, errCnt, errMsg, "xml_string","ERROR_01");
+  }
+
+  return true;
+}</class_source>
+      </definition>
+    </definitions>
+    <fields>
+    </fields>
+    <clear_result_fields>N</clear_result_fields>
+    <info_steps/>
+    <target_steps/>
+    <usage_parameters/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Data grid</name>
     <type>DataGrid</type>
@@ -464,7 +571,25 @@
     </fields>
     <data>
       <line>
-        <item>&lt;p>Hello World&lt;/p></item>
+        <item>&lt;p>Valid open and closing tags&lt;/p></item>
+      </line>
+      <line>
+        <item>&lt;p>Valid &lt;b>nested&lt;/b> tags&lt;/p></item>
+      </line>
+      <line>
+        <item>Invalid as just plain text</item>
+      </line>
+      <line>
+        <item>&lt;p>Invalid as opening tag with no closing tag</item>
+      </line>
+      <line>
+        <item>&lt;p>Invalid a opening and closing tags don't match&lt;/b></item>
+      </line>
+      <line>
+        <item>&lt;p>Invalid as &lt;b>nested tags&lt;/p> closed in wrong sequence&lt;/b></item>
+      </line>
+      <line>
+        <item>&lt;p class="para">Valid open and closing tags with attribute&lt;/p></item>
       </line>
     </data>
     <attributes/>
@@ -476,12 +601,87 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>144</xloc>
-      <yloc>112</yloc>
+      <xloc>176</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Dummy (do nothing)</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>832</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Write to log</name>
+    <type>WriteToLog</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <loglevel>log_level_basic</loglevel>
+    <displayHeader>Y</displayHeader>
+    <limitRows>N</limitRows>
+    <limitRowsNumber>0</limitRowsNumber>
+    <logmessage>XML is now well formed.</logmessage>
+    <fields>
+      <field>
+        <name>xml_string</name>
+      </field>
+      <field>
+        <name>error_desc</name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>832</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step_error_handling>
+    <error>
+      <source_step>Check XML well-formed</source_step>
+      <target_step>Write to log</target_step>
+      <is_enabled>Y</is_enabled>
+      <nr_valuename/>
+      <descriptions_valuename>error_desc</descriptions_valuename>
+      <fields_valuename/>
+      <codes_valuename/>
+      <max_errors/>
+      <max_pct_errors/>
+      <min_pct_rows/>
+    </error>
   </step_error_handling>
   <slave-step-copy-partition-distribution>
   </slave-step-copy-partition-distribution>
