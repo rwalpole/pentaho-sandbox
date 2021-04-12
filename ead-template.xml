@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ead xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="urn:isbn:1-931666-22-9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <eadheader>
+        <eadid> </eadid>
+        <filedesc>
+            <titlestmt>
+                <titleproper/>
+                <titleproper/>
+            </titlestmt>
+        </filedesc>
+    </eadheader>
+    <archdesc level="class">
+        <did>
+            <langmaterial/>
+            <langmaterial/>
+        </did>
+        <!-- ***** -->
+    </archdesc>
+</ead>

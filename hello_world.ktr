@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Check XML well-formed</name>
-    <description/>
+    <name>hello world</name>
+    <description>My first transformation.</description>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
@@ -428,34 +428,45 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2021/04/07 12:08:22.909</created_date>
+    <created_date>2021/04/06 16:11:46.130</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2021/04/07 12:08:22.909</modified_date>
-    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
+    <modified_date>2021/04/06 16:11:46.130</modified_date>
+    <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
+    <notepad>
+      <note>Hello , World!</note>
+      <xloc>566</xloc>
+      <yloc>558</yloc>
+      <width>99</width>
+      <heigth>29</heigth>
+      <fontname>Cantarell</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>143</backgroundcolorred>
+      <backgroundcolorgreen>240</backgroundcolorgreen>
+      <backgroundcolorblue>164</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
   </notepads>
   <order>
     <hop>
-      <from>Check XML well-formed</from>
-      <to>Dummy (do nothing)</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Check XML well-formed</from>
-      <to>Write to log</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Data grid</from>
-      <to>Check XML well-formed</to>
+      <to>User defined Java expression</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Check XML well-formed</name>
-    <type>UserDefinedJavaClass</type>
+    <name>Data grid</name>
+    <type>DataGrid</type>
     <description/>
     <distribute>N</distribute>
     <custom_distribution/>
@@ -464,99 +475,9 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <definitions>
-      <definition>
-        <class_type>TRANSFORM_CLASS</class_type>
-        <class_name>Processor</class_name>
-        <class_source>import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import org.pentaho.di.core.xml.XMLCheck;
-
-public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws KettleException {
-  if (first) {
-    first = false;
-  }
-
-  Object[] row = getRow();
-  boolean rowInError = false;
-  String errMsg = "";
-  int errCnt = 0;
-
-  if (row == null) {
-    setOutputDone();
-    return false;
-  }
-
-  final String xmlString = get(Fields.In, "xml_string").getString(row);
-
-  InputStream xmlStream = null;
-  try{
-    xmlStream = new ByteArrayInputStream(xmlString.getBytes());
-    if(!XMLCheck.isXMLWellFormed(xmlStream)){
-      rowInError = true;
-      errMsg = "The following XML is not well-formed: " + xmlString;
-      errCnt = errCnt + 1;
-    }
-  }
-  catch(Exception ex){
-    rowInError = true;
-    errMsg = ex.getMessage();
-    errCnt = errCnt + 1;
-  }
-  finally {
-    try{
-	  if(xmlStream != null) xmlStream.close();
-    }
-    catch(IOException ioex){
-      // closing quietly
-    }
-  } 
-
-  if(!rowInError){
-    putRow(data.outputRowMeta, row);
-  } else {
-    putError(data.outputRowMeta, row, errCnt, errMsg, "xml_string","ERROR_01");
-  }
-
-  return true;
-}</class_source>
-      </definition>
-    </definitions>
-    <fields>
-    </fields>
-    <clear_result_fields>N</clear_result_fields>
-    <info_steps/>
-    <target_steps/>
-    <usage_parameters/>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>432</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Data grid</name>
-    <type>DataGrid</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
     <fields>
       <field>
-        <name>xml_string</name>
+        <name>people</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -570,25 +491,19 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields>
     <data>
       <line>
-        <item>&lt;p>Valid open and closing tags&lt;/p></item>
+        <item>John</item>
       </line>
       <line>
-        <item>&lt;p>Valid &lt;b>nested&lt;/b> tags&lt;/p></item>
+        <item>Mary</item>
       </line>
       <line>
-        <item>Invalid as just plain text</item>
+        <item>Ammy</item>
       </line>
       <line>
-        <item>&lt;p>Invalid as opening tag with no closing tag</item>
+        <item>Erik</item>
       </line>
       <line>
-        <item>&lt;p>Invalid a opening and closing tags don't match&lt;/b></item>
-      </line>
-      <line>
-        <item>&lt;p>Invalid as &lt;b>nested tags&lt;/p> closed in wrong sequence&lt;/b></item>
-      </line>
-      <line>
-        <item>&lt;p class="para">Valid open and closing tags with attribute&lt;/p></item>
+        <item>Laura</item>
       </line>
     </data>
     <attributes/>
@@ -600,14 +515,14 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
       </output>
     </remotesteps>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>144</yloc>
+      <xloc>528</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Dummy (do nothing)</name>
-    <type>Dummy</type>
+    <name>User defined Java expression</name>
+    <type>Janino</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -616,6 +531,14 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <formula>
+      <field_name>hello_message</field_name>
+      <formula_string>"Hello, " + people + "!"</formula_string>
+      <value_type>String</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -625,167 +548,12 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
       </output>
     </remotesteps>
     <GUI>
-      <xloc>832</xloc>
-      <yloc>224</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Text file input</name>
-    <type>TextFileInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <accept_filenames>N</accept_filenames>
-    <passing_through_fields>N</passing_through_fields>
-    <accept_field/>
-    <accept_stepname/>
-    <separator>|</separator>
-    <enclosure/>
-    <enclosure_breaks>N</enclosure_breaks>
-    <escapechar/>
-    <header>N</header>
-    <nr_headerlines>1</nr_headerlines>
-    <footer>N</footer>
-    <nr_footerlines>1</nr_footerlines>
-    <line_wrapped>N</line_wrapped>
-    <nr_wraps>1</nr_wraps>
-    <layout_paged>N</layout_paged>
-    <nr_lines_per_page>80</nr_lines_per_page>
-    <nr_lines_doc_header>0</nr_lines_doc_header>
-    <noempty>Y</noempty>
-    <include>N</include>
-    <include_field/>
-    <rownum>N</rownum>
-    <rownumByFile>N</rownumByFile>
-    <rownum_field/>
-    <format>Unix</format>
-    <encoding/>
-    <length>Characters</length>
-    <add_to_result_filenames>Y</add_to_result_filenames>
-    <file>
-      <name>/home/rkw/Source/GitHub/rwalpole/pentaho-sandbox/xml-text.txt</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <type>CSV</type>
-      <compression>None</compression>
-    </file>
-    <filters>
-    </filters>
-    <fields>
-      <field>
-        <name>xml_string</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <ifnull/>
-        <position>-1</position>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-    </fields>
-    <limit>0</limit>
-    <error_ignored>N</error_ignored>
-    <skip_bad_files>N</skip_bad_files>
-    <file_error_field/>
-    <file_error_message_field/>
-    <error_line_skipped>N</error_line_skipped>
-    <error_count_field/>
-    <error_fields_field/>
-    <error_text_field/>
-    <bad_line_files_destination_directory/>
-    <bad_line_files_extension>warning</bad_line_files_extension>
-    <error_line_files_destination_directory/>
-    <error_line_files_extension>error</error_line_files_extension>
-    <line_number_files_destination_directory/>
-    <line_number_files_extension>line</line_number_files_extension>
-    <date_format_lenient>Y</date_format_lenient>
-    <date_format_locale>en_GB</date_format_locale>
-    <shortFileFieldName/>
-    <pathFieldName/>
-    <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
-    <uriNameFieldName/>
-    <rootUriNameFieldName/>
-    <extensionFieldName/>
-    <sizeFieldName/>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>112</xloc>
-      <yloc>320</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Write to log</name>
-    <type>WriteToLog</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <loglevel>log_level_basic</loglevel>
-    <displayHeader>Y</displayHeader>
-    <limitRows>N</limitRows>
-    <limitRowsNumber>0</limitRowsNumber>
-    <logmessage>XML is now well formed.</logmessage>
-    <fields>
-      <field>
-        <name>xml_string</name>
-      </field>
-      <field>
-        <name>error_desc</name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>832</xloc>
-      <yloc>368</yloc>
+      <xloc>784</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step_error_handling>
-    <error>
-      <source_step>Check XML well-formed</source_step>
-      <target_step>Write to log</target_step>
-      <is_enabled>Y</is_enabled>
-      <nr_valuename/>
-      <descriptions_valuename>error_desc</descriptions_valuename>
-      <fields_valuename/>
-      <codes_valuename/>
-      <max_errors/>
-      <max_pct_errors/>
-      <min_pct_rows/>
-    </error>
   </step_error_handling>
   <slave-step-copy-partition-distribution>
   </slave-step-copy-partition-distribution>

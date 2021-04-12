@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ead xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="urn:isbn:1-931666-22-9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <eadheader>
+        <eadid> </eadid>
+        <filedesc>
+            <titlestmt>
+                <titleproper/>
+                <titleproper/>
+            </titlestmt>
+        </filedesc>
+    </eadheader>
+    <archdesc level="class">
+        <did>
+            <langmaterial/>
+            <langmaterial/>
+        </did>
+        <scopecontent>
+            <p>Name: <persname><emph altrender="forenames">Arthur </emph>
+                    <emph altrender="surname">Durrant</emph></persname>. </p>
+            <p>Date of Birth: <date type="dateOfBirth">17/9/1918</date>. </p>
+            <p>Place of Birth: <geogname role="placeOfBirth">Gloucester</geogname>. </p>
+            <p>Service: <emph altrender="Service">British Army</emph>. </p>
+            <p>Rank: <emph altrender="rank">Private</emph>. </p>
+            <p>Regiment/Unit/Squadron: <emph altrender="Regiment">Gloucestershire Regiment</emph>. </p>
+            <p>Service Number: <num type="serviceNumber">[5186187]</num>. </p>
+            <p>Date of Capture: <date type="dateOfEvent">31 May 1940</date>. </p>
+            <p>Theatre of Capture: <geogname role="placeOfEvent">Houtkerque,France</geogname>. </p>
+            <p>Camp Name/Number: <geogname role="placeMentioned">Stalag XXI B Szubin</geogname>. </p>
+            <p>PoW number: <num type="prisonerNumber">4535</num>. </p>
+            <p>Date of Death: <date type="dateOfDeath">[unspecified]</date>. </p>
+            <p>Number of Photographs: 0. </p>
+            <p>Number of Fingerprints: 0. </p>
+            <p>Number of X-rays: 0. </p>
+            <p>Number of Cards: 1. </p>
+            <ul>
+                <li>invalid</li>
+            </ul>
+        </scopecontent>
+    </archdesc>
+</ead>
