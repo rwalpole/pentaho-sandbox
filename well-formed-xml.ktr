@@ -750,7 +750,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     <displayHeader>Y</displayHeader>
     <limitRows>N</limitRows>
     <limitRowsNumber>0</limitRowsNumber>
-    <logmessage>XML is now well formed.</logmessage>
+    <logmessage>XML is not well formed.</logmessage>
     <fields>
       <field>
         <name>xml_string</name>

@@ -17,9 +17,8 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     setOutputDone();
     return false;
   }
-  Object[] outputRow = createOutputRow(row, data.outputRowMeta.size());
 
-  final String xmlString = get(Fields.In, "xml_string").getString(row);
+  final String xmlString = get(Fields.In, "scope_and_content").getString(row);
 
   InputStream xmlStream = null;
   try{
@@ -47,7 +46,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
   if(!rowInError){
     putRow(data.outputRowMeta, row);
   } else {
-    putError(data.outputRowMeta, row, errCnt, errMsg, "xml_string","ERROR_01");
+    putError(data.outputRowMeta, row, errCnt, errMsg, "scope_and_content","ERROR_01");
   }
 
   return true;
